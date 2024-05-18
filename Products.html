@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Our Products</title>
+    <link rel="icon" href="LAILOGO-removebg-preview.jpg" type="image/x-icon">
+
+    <!-- JavaScript -->
+    <script>
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        // Call updateCart() and updateSubtotal() on page load
+        updateCart();
+        updateSubtotal();
+
+        function addToCart(productName, quantityId, priceId) {
+            const quantity = parseInt(document.getElementById(quantityId).value);
+            const price = parseFloat(document.getElementById(priceId).innerText.replace('₱', ''));
+
+            const item = {
+                productName: productName,
+                quantity: quantity,
+                price: price * quantity
+            };
+
+            cartItems.push(item);
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            alert(`${productName} added to cart!`);
+            updateCart();
+            updateSubtotal();
+            enableCheckoutButton();
+        }
+
+        function updateCart() {
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.innerHTML = '';
+
+            for (let i = 0; i < cartItems.length; i++) {
+                const item = cartItems[i];
+
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <span class="cart-item-indicator">Product:</span> ${item.productName}<br>
+                    <span class="cart-item-indicator">Quantity:</span> ${item.quantity}<br>
+                    <span class="cart-item-indicator">Price:</span> ₱${item.price}
+                `;
+
+                cartContainer.appendChild(itemElement);
+            }
+        }
+
+        function updateSubtotal() {
+            let subtotal = 0;
+            for (let i = 0; i < cartItems.length; i++) {
+                subtotal += cartItems[i].price;
+            }
+
+            const subtotalAmount = document.getElementById('subtotal-amount');
+            subtotalAmount.textContent = `₱${subtotal.toFixed(2)}`;
+        }
+
+        function enableCheckoutButton() {
+            const confirmButton = document.getElementById('confirm-button');
+            confirmButton.disabled = false;
+        }
+
+        function confirmOrder() {
+            const confirmation = confirm('Do you want to confirm your order?');
+
+            if (confirmation) {
+                alert('Your order has been confirmed!');
+                localStorage.removeItem('cartItems');
+                window.location.href = 'Success.html';
+            } else {
+                alert('Your order has been canceled.');
+            }
+        }
+
+        function clearCart() {
+            // Clear cart items from local storage
+            localStorage.removeItem('cartItems');
+            // Update the cart display
+            updateCart();
+            updateSubtotal();
+            disableCheckoutButton();
+        }
+
+        function disableCheckoutButton() {
+            const confirmButton = document.getElementById('confirm-button');
+            confirmButton.disabled = true;
+        }
+    </script>
+</head>
+<body style="background-image: url('HOME WALLPAPER3.jpg'); background-repeat: no-repeat; background-size: cover;">
+  <header class="header">
+    <div class="logo-container">
+        <a href="index.html">
+            <div class="logo">
+                <img src="LAILOGO-removebg-preview.jpg" alt="LOGO" width="300" height="130">
+            </div>
+        </a>
+        <div class="stock">
+            <h1 class="welcome-text">Lai Crafts</h1>
+        </div>
+    </div>
+    <div class="search-cart-container">
+        <div class="search-container">
+            <input type="text" id="search-box" placeholder="Search...">
+            <button type="submit" id="search-button"><img src="search-icon.jpg" alt="Search"></button>
+        </div>
+        <a href="cart.html" class="cart-link">
+            <img src="cart-removebg-preview.png" alt="Cart">
+        </a>
+    </div>
+    <nav>
+        <ul class="navbar">
+            <li><a href="index.html">Index</a></li>
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="Products.html">Products</a></li>
+            <li><a href="About_Us.html">About us</a></li>
+            <li><a href="Contact_Us.html">Contact us</a></li>
+        </ul>
+    </nav>
+</header>
+    <main>
+        <h1 class="welcome-text">Lai Crafts's Handmade Products</h1>
+
+        <div class="product-container">
+            <div class="product4products">
+                <img src="ScrapPic.jpg" alt="Scrapbooking">
+                <h2 class="product-name">Scrapbooking</h2>
+                <p class="product-description">This is a description of the product.</p>
+                <p id="scrapbooking-price" class="product-price">₱75</p>
+                <div class="product-quantity">
+                    <input type="number" id="scrapbooking-quantity" class="product-quantity-input" min="1" value="1">
+                </div>
+                <button class="add-to-cart-button" onclick="addToCart('Scrapbooking', 'scrapbooking-quantity', 'scrapbooking-price')">
+                    Add to Cart
+                </button>
+            </div>
+
+            <div class="product4products">
+                <img src="JournalPic.jpg" alt="Journal">
+                <h2 class="product-name">Journal Kit Boxes</h2>
+                <p id="journal-price" class="product-price">₱250</p>
+                <div class="product-quantity">
+                    <input type="number" id="journal-quantity" min="1" value="1">
+                </div>
+                <button class="add-to-cart-button" onclick="addToCart('Journal Kit Boxes', 'journal-quantity', 'journal-price')">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+
+        <div class="product-container">
+            <div class="product4products">
+                <img src="GHIBLI_STICKERS.jpg" alt="Stickers">
+                <h2 class="product-name">Stickers</h2>
+                <div class="product-quantity"><input type="number" id="stickers-quantity" min="1" value="1"></div>
+                <p id="stickers-price" class="product-price">₱8</p>
+                <button class="add-to-cart-button" onclick="addToCart('Stickers', 'stickers-quantity', 'stickers-price')">
+                    Add to Cart
+                </button>
+            </div>
+
+            <div class="product4products">
+                <img src="HairClipPic.jpg" alt="Hair Clip">
+                <h2 class="product-name">Hair Clip</h2>
+                <div class="product-quantity"><input type="number" id="hairclip-quantity" min="1" value="1"></div>
+                <p id="hairclip-price" class="product-price">₱35</p>
+                <button class="add-to-cart-button" onclick="addToCart('Hair Clip', 'hairclip-quantity', 'hairclip-price')">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </main>
+
+
+    <footer class="footer">
+        <p class="p-footerCaption">&copy; 2024 Lai Crafts. All rights reserved.</p>
+        <ul class="social-links">
+            <li>
+                <p class="p-footerCaption">Lai Crafts's Social Media Links!</p>
+            </li>
+            <li>
+                <h3>Official Shopee Account: <a href="https://shopee.ph/laicrafts" target="_blank">Click Me!</a></h3>
+            </li>
+            <li>
+                <h3>Official Instagram Account: <a href="https://www.instagram.com/_laicrafts/" target="_blank">Click Me!</a></h3>
+            </li>
+        </ul>
+    </footer>
+</body>
+</html>
